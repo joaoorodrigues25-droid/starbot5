@@ -1,3 +1,4 @@
+require('http').createServer((req,res)=>res.end('STARBOT ONLINE')).listen(process.env.PORT||10000);
 if(!global.crypto) global.crypto=require("crypto");
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = require("@whiskeysockets/baileys");
 const P=require("pino"), fs=require("fs");
