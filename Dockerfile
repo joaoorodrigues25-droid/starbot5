@@ -1,6 +1,5 @@
-FROM node:20-alpine
+FROM node:18
 WORKDIR /app
-COPY package.json ./
-RUN npm install --legacy-peer-deps
 COPY . .
+RUN npm install --legacy-peer-deps
 CMD ["node", "Bot.js"]
