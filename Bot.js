@@ -27,19 +27,18 @@ if(connection==="open"){ clearInterval(intervalo); console.log(`\n✅ STARBOT 55
 if(connection==="close"){
  let code=lastDisconnect?.error?.output?.statusCode;
  console.log("Fechou:", code);
- if(code===405){ console.log("405 = block temporário 60s"); clearInterval(intervalo); setTimeout(iniciar,60000); return; }
+ if(code===405){ console.log("405 block 60s"); clearInterval(intervalo); setTimeout(iniciar,60000); return; }
  if(code!==DisconnectReason.loggedOut) setTimeout(iniciar,5000);
 }
 if(!state.creds.registered &&!jaPediu){
  jaPediu=true;
- console.log("Estabilizando 10s pro FIX 405...");
  setTimeout(async()=>{
   try{
    const c=await sock.requestPairingCode("556282575515");
-   console.log(`\n========== STARBOT CÓDIGO ==========\nBOT: 556282575515\nDONO: 5534997763828\nCÓDIGO: ${c}\n====================================\n`);
+   console.log(`\n========== CODIGO 1 MIN ==========\nBOT: 556282575515\nNOVO CODIGO: ${c}\nVOCE TEM 70 SEGUNDOS!\n====================================\n`);
    intervalo=setInterval(async()=>{
-    try{ if(sock.authState.creds.registered){ clearInterval(intervalo); return; } const n=await sock.requestPairingCode("556282575515"); console.log(`NOVO CÓDIGO: ${n}`); }catch(e){}
-   },45000);
+    try{ if(sock.authState.creds.registered){ clearInterval(intervalo); return; } const n=await sock.requestPairingCode("556282575515"); console.log(`NOVO CODIGO (70s): ${n}`); }catch(e){}
+   },70000);
   }catch(e){ console.log("Erro:", e.message); jaPediu=false; }
  },10000);
 }
@@ -93,6 +92,7 @@ if(cmd=="menudono") return reply(`┏━━━━ 👑 MENU DONO ━━━━┓
 ┃!subdono @ - Add subdono
 ┃!delsubdono @ - Remove subdono
 ┃!listsub - Lista subdonos
+┃!menualuguel - Menu aluguel
 ┃!alugar 30min - 30 minutos
 ┃!alugar 1h - 1 hora
 ┃!alugar 2h - 2 horas
@@ -105,6 +105,7 @@ if(cmd=="menudono") return reply(`┏━━━━ 👑 MENU DONO ━━━━┓
 ┃!alugar 30d - 30 dias
 ┃!aluguel - Tempo restante
 ┃!listaluguel - Lista alugados
+┃!setmenu [tipo] - Troca foto menu
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menualuguel") return reply(`┏━━━━ ⏰ ALUGUEL ━━━━┓
 ┃!alugar 30min - 30 minutos
@@ -119,11 +120,17 @@ if(cmd=="menualuguel") return reply(`┏━━━━ ⏰ ALUGUEL ━━━━┓
 ┃!alugar 30d - 30 dias
 ┃!aluguel - Ver tempo
 ┃!listaluguel - Listar
+┃!subdono @ - Add subdono
+┃!delsubdono @ - Remove
+┃!listsub - Lista subdonos
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menubloqueio") return reply(`┏━━━━ 🔒 BLOQUEIO ━━━━┓
 ┃!bloquear [cmd] - Bloqueia
+┃!block [cmd] - Bloqueia
 ┃!desbloquear [cmd] - Desbloqueia
+┃!unblock [cmd] - Desbloqueia
 ┃!listablock - Lista bloqueados
+┃!bloqueados - Lista bloqueados
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menuadm") return reply(`┏━━━━ 🛡️ MENU ADM 35 ━━━━┓
 ┃!ban @ - Banir
@@ -133,12 +140,29 @@ if(cmd=="menuadm") return reply(`┏━━━━ 🛡️ MENU ADM 35 ━━━�
 ┃!rebaixar @ - Rebaixar ADM
 ┃!admins - Lista ADMs
 ┃!membros - Qtd membros
+┃!infogrupo - Info grupo
 ┃!link - Link grupo
+┃!revogar - Reseta link
 ┃!abrir - Abre grupo
 ┃!fechar - Fecha grupo
+┃!setnome [txt] - Muda nome
+┃!setdesc [txt] - Muda desc
+┃!antilink on/off
+┃!bemvindo on/off
+┃!setbemvindo [txt]
+┃!mutar @ - Muta
+┃!desmutar @ - Desmuta
+┃!listamuta - Lista mutados
 ┃!todos [txt] - Marca todos
 ┃!hidetag [txt] - Marca invisível
+┃!marcar [txt] - Marca geral
+┃!aviso @ - Warn
+┃!warns @ - Ver warns
+┃!resetwarns @
 ┃!del - Apaga msg
+┃!bloquear [cmd]
+┃!desbloquear [cmd]
+┃!listablock
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menupets") return reply(`┏━━━━ 🐾 PETS ━━━━┓
 ┃!adotarpet [nome] - Adotar pet
@@ -146,52 +170,91 @@ if(cmd=="menupets") return reply(`┏━━━━ 🐾 PETS ━━━━┓
 ┃!alimentar - Alimentar
 ┃!brincar - Brincar
 ┃!curar - Curar 100%
+┃!pets - Listar pets grupo
+┃!abandonarpets - Abandonar
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menurpg") return reply(`┏━━━━ ⚔️ RPG ━━━━┓
 ┃!saldo - Ver saldo
+┃!dinheiro - Ver dinheiro
 ┃!trabalhar - Trabalhar +R$
 ┃!daily - Daily R$500
 ┃!roubar @ - Roubar
 ┃!pay @ [valor] - Pagar
+┃!loja - Ver loja
+┃!comprar [item]
+┃!batalhar @ - Batalhar
+┃!topdinheiro - Top ricos
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menuacoes") return reply(`┏━━━━ 🥊 AÇÕES GIFS ━━━━┓
 ┃!beijar @ - Beijar GIF
+┃!beijo @ - Beijar GIF
+┃!kiss @ - Beijar GIF
 ┃!abraçar @ - Abraçar GIF
+┃!abracar @ - Abraçar GIF
+┃!hug @ - Abraçar GIF
+┃!tapa @ - Tapa GIF
 ┃!tapar @ - Tapa GIF
+┃!slap @ - Tapa GIF
 ┃!socar @ - Socar GIF
+┃!soco @ - Socar GIF
 ┃!chutar @ - Chutar GIF
+┃!chute @ - Chutar GIF
 ┃!matar @ - Matar GIF
+┃!kill @ - Matar GIF
 ┃!lamber @ - Lamber GIF
 ┃!morder @ - Morder GIF
 ┃!cafune @ - Cafuné GIF
+┃!pat @ - Cafuné GIF
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menugrupo") return reply(`┏━━━━ 👥 GRUPO ━━━━┓
 ┃!perfil @ - Ver perfil
+┃!perfil - Seu perfil
 ┃!level - Seu level
 ┃!rank - Rank level
 ┃!ping - Ping bot
 ┃!id - ID grupo
+┃!calc [conta] - Calculadora
+┃!cep [00000000] - CEP
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menujogos") return reply(`┏━━━━ 🎮 JOGOS ━━━━┓
 ┃!dado - Dado 1-6
+┃!caraoucoroa - Cara/coroa
+┃!ppt [pedra/papel/tesoura]
 ┃!gay @ - % gay
 ┃!gado @ - % gado
+┃!corno @ - % corno
+┃!gostoso @ - % gostoso
+┃!feio @ - % feio
 ┃!casal - Casal do dia
+┃!ship @ @ - Shipar 2
+┃!amor @ @ - % amor
+┃!quando - Quando acontece
+┃!morte @ - Quando morre
+┃!rankgay - Rank gay
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menufig") return reply(`┏━━━━ 🎨 FIG ━━━━┓
 ┃!s - Foto vira fig
+┃!s [texto] - Texto vira fig
 ┃!toimg - Fig vira foto
+┃!attp [texto] - Texto piscando
+┃!roubar [nome] - Rouba fig
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menulogos") return reply(`┏━━━━ 🖌️ LOGOS ━━━━┓
 ┃!logo1 [texto] - Logo1
 ┃!neon [texto] - Neon
 ┃!3d [texto] - Texto 3D
+┃!grafite [texto] - Grafite
+┃!glitch [a|b] - Glitch
+┃!harry [texto] - Harry Potter
+┃!blackpink [texto] - BlackPink
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 if(cmd=="menudl") return reply(`┏━━━━ 📥 DOWNLOADS ━━━━┓
 ┃!play [nome] - Música
 ┃!ytmp3 [link] - YT MP3
 ┃!ytmp4 [link] - YT MP4
 ┃!tiktok [link] - TikTok
+┃!insta [link] - Instagram
+┃!fb [link] - Facebook
 ┗━━━━━━━━━━━━━━━━━━━━┛`);
 
 if(cmd=="ban"||cmd=="kick"){ let w=m.message.extendedTextMessage?.contextInfo?.mentionedJid; if(!w) return reply("Marca @"); await sock.groupParticipantsUpdate(jid,w,"remove"); return reply("✅ Banido"); }
@@ -224,6 +287,7 @@ if(cmd=="morder") return await sendAcao(sock,jid,m,sender,"morder");
 if(cmd=="cafune"||cmd=="pat") return await sendAcao(sock,jid,m,sender,"cafune");
 if(cmd=="s"){ try{ let buf=await sock.downloadMediaMessage(m,'buffer',{},{}); await sock.sendMessage(jid,{sticker:buf},{quoted:m}); }catch{ return reply("Manda foto com!s"); } return; }
 if(cmd=="toimg"){ try{ let buf=await sock.downloadMediaMessage(m,'buffer',{},{}); await sock.sendMessage(jid,{image:buf, caption:"✅ ToImg"},{quoted:m}); }catch{ return reply("Marca figurinha com!toimg"); } return; }
+if(cmd.startsWith("logo")) return reply(`🖌️ Logo ${cmd} gerado: ${q}\n(Conecta API de logos depois)`);
 });
 }
 iniciar();
