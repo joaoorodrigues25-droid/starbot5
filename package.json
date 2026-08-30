@@ -1,0 +1,11 @@
+{
+  "name": "starbot5",
+  "version": "1.0.0",
+  "main": "Bot.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.0",
+    "pino": "^8.16.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
