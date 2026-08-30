@@ -1,5 +1,5 @@
 FROM node:20
 WORKDIR /app
-COPY . .
+COPY..
 RUN npm install --legacy-peer-deps
 CMD ["node", "Bot.js"]
