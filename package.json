@@ -1,0 +1,9 @@
+{
+  "name": "starbot",
+  "version": "1.0.0",
+  "main": "Bot.js",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.18",
+    "pino": "^8.16.0"
+  }
+}
